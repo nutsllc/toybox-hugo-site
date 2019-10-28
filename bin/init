@@ -16,8 +16,14 @@ function _init() {
     git submodule add https://github.com/${THEME_VENDOR}/${THEME_NAME}
 
     echo ">> setup ${THEME_NAME} theme"
-    cp ${THEME_NAME}/exampleSite/config.toml ../
-    sed -i -e 's/^\(themesdir\)/#\1/' ../config.toml
+    for filepath in ${DEPLOY_FILES}; do
+        cp -r ${THEME_NAME}/${filepath} ../
+        echo "copy /site/themes/${THEME_NAME}/${filepath} to /site"
+    done
+
+    cd ../ && _cmdExec;
+
+    #sed -i -e 's/^\(themesdir\)/#\1/' ../config.toml
     cp -r ${SELF}/../lib ${SELF}/../site/bin
     mv ${SELF}/../site/bin/docker-compose.yml ${SELF}/../site
 }
