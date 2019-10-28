@@ -1,6 +1,6 @@
 # Toybox Hugo Site
 
-## Getting Start
+## Getting Started
 
 ### STEP1: Clone this repository
 
