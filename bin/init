@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -e
+
+SELF=$(cd $(dirname $0); pwd)
+. ${SELF}/.env
+
+function _init() {
+    echo ">> create hugo site"
+    docker run -v ${SELF}/../:/site --rm -it nutsllc/toybox-hugo hugo new site site
+
+    echo ">> download ${THEME_NAME} theme"
+    cd site
+    git init
+    cd themes
+    git submodule add https://github.com/${THEME_VENDOR}/${THEME_NAME}
+
+    echo ">> setup ${THEME_NAME} theme"
+    cp ${THEME_NAME}/exampleSite/config.toml ../
+    sed -i -e 's/^\(themesdir\)/#\1/' ../config.toml
+    cp -r ${SELF}/../lib ${SELF}/../site/bin
+    mv ${SELF}/../site/bin/docker-compose.yml ${SELF}/../site
+}
+
+_init && {
+    echo "complete!"
+}
+
+exit 0;
